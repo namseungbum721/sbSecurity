@@ -5,6 +5,10 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.sb.entity.Board;
 import org.zerock.sb.entity.Reply;
@@ -65,4 +69,17 @@ public class ReplyRepositoryTests {
 
         replyList.forEach(reply -> log.info(reply));
     }
+
+    @Test
+    public void testListOfBoard() {
+        Pageable pageable = PageRequest.of(0,10, Sort.by("rno").descending());
+
+        Page<Reply> result = replyRepository.getListByBno(197L, pageable);
+
+        log.info(result.getTotalElements());
+
+        result.get().forEach(reply -> log.info(reply));
+    }
+
+
 }

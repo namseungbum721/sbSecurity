@@ -7,4 +7,7 @@ import org.zerock.sb.entity.Board;
 public interface BoardSearch {
 
     Page<Board> search1(char[] typeArr, String keyword, Pageable pageable);
+
+    Page<Object[]> searchWithReplyCount(char[] typeArr, String keyword, Pageable pageable);
+
 }

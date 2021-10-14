@@ -65,7 +65,7 @@ public class BoardServiceImpl implements BoardService {
 
 
     @Override
-    public PageResponseDTO<BoardListDTO> getListWithReplyCount(PageRequestDTO pageRequestDTO) {
+    public PageResponseDTO<BoardListDTO> getListWithReply(PageRequestDTO pageRequestDTO) {
 
         char[] typeArr = pageRequestDTO.getTypes();
         String keyword = pageRequestDTO.getKeyword();
@@ -89,7 +89,7 @@ public class BoardServiceImpl implements BoardService {
         }).collect(Collectors.toList());
 
         return new PageResponseDTO<>(pageRequestDTO,(int)result.getTotalElements(),dtoList);
-        
+
     }
 
     @Override

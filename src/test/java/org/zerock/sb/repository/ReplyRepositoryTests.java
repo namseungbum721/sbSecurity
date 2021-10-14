@@ -81,5 +81,35 @@ public class ReplyRepositoryTests {
         result.get().forEach(reply -> log.info(reply));
     }
 
+    @Test
+    public void testCountOfBoard() {
+        Long bno = 190L;
 
+        //ex)120일 경우
+        int count = replyRepository.getReplyCountOfBoard(bno);
+
+        int lastPage = (int)(Math.ceil(count/10.0));
+        if (lastPage == 0 ) {
+          lastPage = 1;
+        }
+        //3가지 입력 : 0부터 시작하는 페이지번호(마지막페이지번호가 12인 경우 -> 11) , 사이즈, 솥르
+        Pageable pageable = PageRequest.of(lastPage-1, 10); //sort 제외 ->asc로자동처리
+        Page<Reply> result = replyRepository.getListByBno(bno, pageable); //해당 게시물의 댓글 목록 가져오기
+
+        log.info("total :" + result.getTotalElements());
+        log.info(".... :" + result.getTotalPages());
+
+        result.get().forEach(reply -> {
+            log.info(reply);
+        });
+
+        //121/10.0 ==>12 * 10 120 limit 110,120
+//        int lastPageNum = (int)(Math.ceil(count / (double)10)); //double로 한페이지당 10개씩 뿌리기
+//
+//        int lastEnd = lastPageNum * 10;//120
+//        int lastStart = lastEnd - 10;
+//
+//        log.info(lastStart + " : " + lastEnd);
+
+    }
 }

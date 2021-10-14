@@ -14,7 +14,7 @@ public interface BoardService {
 
     PageResponseDTO<BoardDTO> getList(PageRequestDTO pageRequestDTO);
 
-    PageResponseDTO<BoardListDTO> getListWithReplyCount(PageRequestDTO pageRequestDTO);
+    PageResponseDTO<BoardListDTO> getListWithReply(PageRequestDTO pageRequestDTO);
 
     BoardDTO read(Long bno);
 

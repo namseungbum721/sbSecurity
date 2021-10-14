@@ -21,4 +21,15 @@ public class ReplyServiceTests {
 
         replyService.getListOfBoard(bno,pageRequestDTO);
     }
+
+
+    @Test
+    public void testList2(){
+        Long bno = 198L;
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().
+                page(-1)
+                .build();
+
+        log.info(replyService.getListOfBoard(bno, pageRequestDTO));
+    }
 }

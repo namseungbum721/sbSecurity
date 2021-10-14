@@ -28,16 +28,48 @@ public class ReplyServiceImpl implements ReplyService{
     @Override
     public PageResponseDTO<ReplyDTO> getListOfBoard(Long bno, PageRequestDTO pageRequestDTO) {
 
-        Pageable pageable = PageRequest.of(pageRequestDTO.getPage() -1, pageRequestDTO.getSize(),
-                Sort.by("rno").descending());
+        Pageable pageable = null;
 
-        Page<Reply> result = replyRepository.getListByBno(bno, pageable);
+        //pageRequestDTO안의 page값이 -1이라면, 우리가 test에서 만든 로직을 사용하여 값을 변경해줘야함.
+        if(pageRequestDTO.getPage() == -1){
+            int lastPage = calcLastPage(bno, pageRequestDTO.getSize()); // -1 : 댓글이 없는경우, 숫자 마지막 댓글 페이지
+            if(lastPage <= 0){
+                lastPage = 1;
+            }
+            pageRequestDTO.setPage(lastPage);
+        }
 
-        List<ReplyDTO> dtoList = result.get()
-                .map(reply -> modelMapper.map(reply, ReplyDTO.class))
+        pageable =  PageRequest.of(pageRequestDTO.getPage() -1, pageRequestDTO.getSize());
+
+
+        Page<Reply> result = replyRepository.getListByBno(bno,pageable);
+
+        List<ReplyDTO> dtoList = result.get().map(reply->
+                        modelMapper.map(reply,ReplyDTO.class))
                 .collect(Collectors.toList());
-        //dtoList.forEach(replyDTO -> log.info(replyDTO));
 
-        return new PageResponseDTO<>(pageRequestDTO,(int)result.getTotalElements(), dtoList);
+        //  dtoList.forEach(replyDTO->log.info(replyDTO));
+
+        return new PageResponseDTO<>( pageRequestDTO, (int)result.getTotalElements(),dtoList);
+    }
+
+    @Override
+    public Long register(ReplyDTO replyDTO) {
+
+        //Board board = Board.builder().bno(replyDTO.getBno()).build();//id값을통해 board찾기, reply안에 board객체필요
+
+        Reply reply = modelMapper.map(replyDTO, Reply.class);//소스코드는 replyDTO안에 있고 우리는 REPLY타입으로 이것을 바꿔줘야함
+
+        replyRepository.save(reply);
+
+        return reply.getRno();
+    }
+
+    private int calcLastPage(Long bno, double size) {//마지막 페이지 계산 메서드
+
+        int count = replyRepository.getReplyCountOfBoard(bno);
+        int lastPage = (int)(Math.ceil(count/size));
+
+        return lastPage;
     }
 }

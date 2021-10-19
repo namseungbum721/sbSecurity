@@ -37,7 +37,7 @@ public class BoardServiceTests {
             BoardDTO boardDTO = BoardDTO.builder()
                     .title("title..." + i)
                     .content("content..." + i)
-                    .writer("user" + (i %10 ))
+                    .writer("user" + (i % 10 ))
                     .build();
            Long bno =  boardService.register(boardDTO);
 

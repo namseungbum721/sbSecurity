@@ -14,7 +14,7 @@ import org.zerock.sb.dto.BoardDTO;
 import org.zerock.sb.entity.Board;
 
 import java.util.Arrays;
-import java.util.List;
+
 
 @SpringBootTest
 @Log4j2
@@ -62,4 +62,10 @@ public class BoardRepositoryTests {
         });
 
     }
+
+
+
+
+
+
 }

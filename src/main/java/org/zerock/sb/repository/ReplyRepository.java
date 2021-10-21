@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
-    List<Reply> findReplyByBoard_BnoOrderByRno(Long bno); //쿼리 메서드를 이용하여 만들 수 있다.
+    List<Reply> findReplyByBoard_BnoOrderByRno(Long bno);
 
     @Query("select r from Reply r where r.board.bno = :bno")
     Page<Reply> getListByBno(Long bno, Pageable pageable);
@@ -18,7 +18,4 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     @Query("select count(r) from Reply r where r.board.bno = :bno")
     int getReplyCountOfBoard(Long bno);
 
-
 }
-
-

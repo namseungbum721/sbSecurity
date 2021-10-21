@@ -1,6 +1,5 @@
 package org.zerock.sb.service;
 
-
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.sb.dto.BoardDTO;
 import org.zerock.sb.dto.BoardListDTO;
@@ -14,7 +13,7 @@ public interface BoardService {
 
     PageResponseDTO<BoardDTO> getList(PageRequestDTO pageRequestDTO);
 
-    PageResponseDTO<BoardListDTO> getListWithReply(PageRequestDTO pageRequestDTO);
+    PageResponseDTO<BoardListDTO> getListWithReplyCount(PageRequestDTO pageRequestDTO);
 
     BoardDTO read(Long bno);
 

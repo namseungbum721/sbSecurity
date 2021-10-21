@@ -16,45 +16,23 @@ public class ReplyController {
 
     private final ReplyService replyService;
 
-    @GetMapping("/list/{bno}") //고정으로 bno를 사용하기 위해 이렇게 셋팅 pathable로 bno를 걸어준다.
-    public PageResponseDTO<ReplyDTO> getListOfBoard(@PathVariable("bno") Long bno, PageRequestDTO pageRequestDTO) {
+    @GetMapping("/list/{bno}")
+    public PageResponseDTO<ReplyDTO> getListOfBoard(@PathVariable("bno") Long bno, PageRequestDTO pageRequestDTO){
 
         return replyService.getListOfBoard(bno, pageRequestDTO);
 
     }
 
     @PostMapping("")
-    public PageResponseDTO<ReplyDTO> register(@RequestBody ReplyDTO replyDTO){//마지막 페이지를 보여주기위해 pageresponseDTO리턴
-        //JSON DATA를 받기위해 RequestBody 사용 필요
+    public PageResponseDTO<ReplyDTO> register(@RequestBody ReplyDTO replyDTO) {
 
         replyService.register(replyDTO);
 
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(-1).build();//마지막페이지로 가기위해, page에 -1을넣으면
-        //service단에서 if문으로 마지막 페이지 로딩 로직 해줌
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(-1).build();
 
         return replyService.getListOfBoard(replyDTO.getBno(), pageRequestDTO);
 
     }
 
-    @DeleteMapping("/{bno}/{rno}")
-    public PageResponseDTO<ReplyDTO> remove(@PathVariable("bno") Long bno,
-                                            @PathVariable("rno") Long rno,
-                                            PageRequestDTO requestDTO ) {
-
-        return replyService.remove(bno, rno, requestDTO);
-    }
-
-    @PutMapping("/{bno}/{rno}")
-    public PageResponseDTO<ReplyDTO> modify(@PathVariable("bno") Long bno,
-                                            @PathVariable("rno") Long rno,
-                                            @RequestBody ReplyDTO replyDTO,
-                                            PageRequestDTO requestDTO) {
-
-        log.info("bno: " + bno);
-        log.info("rno: " + rno);
-        log.info("replyDTO: " + replyDTO);
-
-        return replyService.modify(replyDTO, requestDTO);
-    }
-
 }
+

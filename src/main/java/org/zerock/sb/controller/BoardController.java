@@ -1,8 +1,8 @@
 package org.zerock.sb.controller;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +13,7 @@ import org.zerock.sb.dto.BoardDTO;
 import org.zerock.sb.dto.PageRequestDTO;
 import org.zerock.sb.service.BoardService;
 
-@Controller //스프링같은 경우 자동 configuration해준다.
+@Controller
 @Log4j2
 @RequiredArgsConstructor
 @RequestMapping("/board")
@@ -22,15 +22,18 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/list")
-    public void list(PageRequestDTO pageRequestDTO, Model model) {
+    public void list(PageRequestDTO pageRequestDTO, Model model){
 
-        model.addAttribute("responseDTO", boardService.getList(pageRequestDTO));
+//        model.addAttribute("responseDTO", boardService.getList(pageRequestDTO));
+        model.addAttribute("responseDTO", boardService.getListWithReplyCount(pageRequestDTO));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/register")
     public void register() {
 
     }
+
     @PostMapping("/register")
     public String registerPost(BoardDTO boardDTO, RedirectAttributes redirectAttributes) {
 
@@ -42,12 +45,9 @@ public class BoardController {
     }
 
     @GetMapping("/read")
-    public void read(Long bno, PageRequestDTO pageRequestDTO, Model model) {
+    public void read(Long bno, PageRequestDTO pageRequestDTO, Model model){
 
         model.addAttribute("dto", boardService.read(bno));
 
     }
-
-
-
 }

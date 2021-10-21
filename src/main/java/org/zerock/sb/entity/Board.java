@@ -1,6 +1,5 @@
 package org.zerock.sb.entity;
 
-
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,14 +10,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
+@Entity
 @Builder
-@Entity //엔티티를 사용하면 id값을 주어야한다. 안주면 에러
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Getter
+@ToString
 public class Board {
-    @Id //수정이 안된다.
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bno;
 
@@ -34,7 +34,7 @@ public class Board {
     @UpdateTimestamp
     private LocalDateTime modDate;
 
-    public void change(String title, String content) { //수정하려고 한다.
+    public void change(String title, String content){
         this.title = title;
         this.content = content;
     }

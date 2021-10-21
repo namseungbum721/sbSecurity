@@ -1,12 +1,10 @@
 package org.zerock.sb.service;
 
-
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.zerock.sb.dto.BoardDTO;
-import org.zerock.sb.entity.Board;
 
 import java.util.stream.IntStream;
 
@@ -27,24 +25,20 @@ public class BoardServiceTests {
                 .build();
 
         boardService.modify(boardDTO);
-
     }
 
     @Test
     public void testRegister() {
 
-        IntStream.rangeClosed(1,200).forEach(i -> {
+        IntStream.rangeClosed(1, 200).forEach(i -> {
             BoardDTO boardDTO = BoardDTO.builder()
                     .title("title..." + i)
-                    .content("content..." + i)
-                    .writer("user" + (i % 10 ))
+                    .content("content...." + i)
+                    .writer("user" + (i%10))
                     .build();
-           Long bno =  boardService.register(boardDTO);
 
-           log.info("BNO:" + bno);
-
+            Long bno = boardService.register(boardDTO);
+            log.info("BNO" + bno);
         });
-
     }
-
 }

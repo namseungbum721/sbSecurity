@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -23,7 +24,6 @@ public class DiaryDTO {
     private String writer;
 
     private LocalDateTime regDate;
-
     private LocalDateTime modDate;
 
     private List<String> tags;

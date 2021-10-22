@@ -1,6 +1,5 @@
 package org.zerock.sb.repository;
 
-
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,32 +24,36 @@ public class MemberRepositoryTests {
     private PasswordEncoder passwordEncoder;
 
     @Test
-    public void insertMembers() {
+    public void insertMembers(){
+
         IntStream.rangeClosed(1,100).forEach(i -> {
 
             Set<MemberRole> roleSet = new HashSet<>();
+
             roleSet.add(MemberRole.USER);
 
-            if (i >= 50) {
-                roleSet.add(MemberRole.STORE); //권한부여하는 코드
+            if(i >=50){
+                roleSet.add(MemberRole.STORE);
             }
-            if (i >= 80) {
+            if(i >= 80){
                 roleSet.add(MemberRole.ADMIN);
             }
 
             Member member = Member.builder()
-                    .mid("user" + i)
+                    .mid("user"+i)
                     .mpw("1111")
-                    .mname("사용자" + i)
+                    .mname("사용자"+i)
                     .roleSet(roleSet)
                     .build();
 
             memberRepository.save(member);
+
         });
+
     }
 
     @Test
-    public void updateMembers(){
+    public void updateMembers() {
 
         List<Member> memberList = memberRepository.findAll();
 
@@ -59,6 +62,7 @@ public class MemberRepositoryTests {
 
             memberRepository.save(member);
         });
+
 
     }
 }

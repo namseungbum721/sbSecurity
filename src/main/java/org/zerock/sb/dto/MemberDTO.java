@@ -1,5 +1,6 @@
 package org.zerock.sb.dto;
 
+
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -58,5 +59,3 @@ public class MemberDTO implements UserDetails {
         return true;
     }
 }
-
-

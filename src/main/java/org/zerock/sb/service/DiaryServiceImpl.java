@@ -1,5 +1,6 @@
 package org.zerock.sb.service;
 
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Service
 @RequiredArgsConstructor
 @Log4j2
@@ -33,9 +35,14 @@ public class DiaryServiceImpl implements DiaryService{
 
         Diary diary = modelMapper.map(dto, Diary.class);
 
+        log.info(diary);
+        log.info(diary.getTags());
+        log.info(diary.getPictures());
+
         diaryRepository.save(diary);
 
         return diary.getDno();
+
     }
 
     @Override
@@ -62,9 +69,10 @@ public class DiaryServiceImpl implements DiaryService{
 
         long totalCount = result.getTotalElements();
 
-        List<DiaryDTO> dtoList = result.get().map(diary -> modelMapper.map(diary, DiaryDTO.class)).collect(Collectors.toList());
+        List<DiaryDTO> dtoList
+                = result.get().map(diary -> modelMapper.map(diary,DiaryDTO.class)).collect(Collectors.toList());
 
-        return new PageResponseDTO<>(pageRequestDTO, (int)totalCount, dtoList);
+        return new PageResponseDTO<>(pageRequestDTO,(int)totalCount, dtoList);
     }
 
     @Override
@@ -79,26 +87,37 @@ public class DiaryServiceImpl implements DiaryService{
 
         long totalCount = result.getTotalElements();
 
-        //오브젝트 배열을 DiaryListDTO로 변환 //Object의 0번째가 Diary
         List<DiaryListDTO> dtoList = result.get().map(objects -> {
             Object[] arr = (Object[])objects;
             Diary diary = (Diary)arr[0];
             long totalScore = (long)arr[1];
 
-//            log.info("---------------------");
+//            log.info("-------------------------");
 //            log.info(diary);
 //            log.info(totalScore);
 
-            DiaryListDTO diaryListDTO = modelMapper.map(diary, DiaryListDTO.class); //필요한 애들만 카피가 된다.
+            DiaryListDTO diaryListDTO = modelMapper.map(diary, DiaryListDTO.class);
             diaryListDTO.setTotalScore((int)totalScore);
 
 //            log.info(diaryListDTO);
-//            log.info("=================================");
+//            log.info("===========================");
 
-            return diaryListDTO; //이제 List로 묶어줘야 한다
+            return diaryListDTO;
         }).collect(Collectors.toList());
 
-        //DiaryServiceImpl
+
         return new PageResponseDTO<>(pageRequestDTO, (int)totalCount, dtoList);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+

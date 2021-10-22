@@ -15,7 +15,6 @@ public interface DiaryService {
 
     PageResponseDTO<DiaryDTO> getList(PageRequestDTO pageRequestDTO);
 
-    //10-20일
     PageResponseDTO<DiaryListDTO> getListWithFavorite(PageRequestDTO pageRequestDTO);
 
 }

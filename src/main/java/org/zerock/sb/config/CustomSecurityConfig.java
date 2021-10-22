@@ -9,30 +9,50 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.zerock.sb.security.filter.TokenCheckFilter;
+import org.zerock.sb.security.filter.TokenGenerateFilter;
+import org.zerock.sb.security.util.JWTUtil;
 
-@Configuration //설정파일입니다 라는 뜻
+@Configuration
 @Log4j2
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
-public class CustomSecurityConfig extends WebSecurityConfigurerAdapter {
+public class CustomSecurityConfig  extends WebSecurityConfigurerAdapter {
 
-
-    @Bean //인코드 설정
-    public PasswordEncoder passwordEncoder() {
+    @Bean
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        log.info("CustomSecurityConfig..configure...........");
-        log.info("CustomSecurityConfig..configure...........");
-        log.info("CustomSecurityConfig..configure...........");
-        log.info("CustomSecurityConfig..configure...........");
+        log.info("CustomSecurityConfig..configure............");
+        log.info("CustomSecurityConfig..configure............");
+        log.info("CustomSecurityConfig..configure............");
+        log.info("CustomSecurityConfig..configure............");
 
         http.formLogin().loginPage("/customLogin").loginProcessingUrl("/login"); //인가/인증에 문제시 로그인 화면
         http.csrf().disable();
         http.logout();
 
+        http.addFilterBefore(tokenCheckFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(tokenGenerateFilter(), UsernamePasswordAuthenticationFilter.class);
+
+    }
+
+    @Bean
+    public TokenCheckFilter tokenCheckFilter(){
+        return new TokenCheckFilter(jwtUtil());
+    }
+
+    @Bean
+    public TokenGenerateFilter tokenGenerateFilter()throws Exception{
+        return new TokenGenerateFilter("/jsonApiLogin", authenticationManager(), jwtUtil() );
+    }
+
+    @Bean
+    public JWTUtil jwtUtil() {
+        return new JWTUtil();
     }
 }

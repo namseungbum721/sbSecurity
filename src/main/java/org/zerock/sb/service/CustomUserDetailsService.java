@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.zerock.sb.dto.MemberDTO;
 import org.zerock.sb.entity.Member;
 import org.zerock.sb.repository.MemberRepository;
+
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,26 +24,26 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        log.info("-----------------------------------");
-        log.info("----------------loadUserByUserName-----"+ username);
+        log.info("-----------------------------");
+        log.info("------loadUserByUsername------" + username);
 
-       Optional<Member> optionalMember = memberRepository.getMemberEager(username);
+        Optional<Member> optionalMember = memberRepository.getMemberEager(username);
 
-        Member member = optionalMember.orElseThrow(()-> new UsernameNotFoundException("USER NOT FOUND"));
+        Member member = optionalMember.orElseThrow(() -> new UsernameNotFoundException("USER NOT FOUND"));
 
-        log.info("Member:" + member);
+        log.info("Member: " + member);
 
         MemberDTO memberDTO = MemberDTO.builder()
                 .mid(member.getMid())
                 .mpw(member.getMpw())
                 .mname(member.getMname())
-                .roles(member.getRoleSet().stream().map(memberRole -> new SimpleGrantedAuthority("ROLE_" + memberRole.name())).collect(Collectors.toSet()))
+                .roles(member.getRoleSet().stream().map(memberRole -> new SimpleGrantedAuthority("ROLE_"+memberRole.name())).collect(Collectors.toSet()))
                 .build();
 
         log.info(memberDTO);
 
-        log.info("-----------------------------------------------");
-        log.info("-----------------------------------------------");
+        log.info("-------------------------------------------------");
+        log.info("-------------------------------------------------");
 
         return memberDTO;
     }

@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Builder
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class DiaryListDTO {
@@ -26,5 +26,4 @@ public class DiaryListDTO {
     private List<DiaryPictureDTO> pictures;
 
     private int totalScore;
-
 }

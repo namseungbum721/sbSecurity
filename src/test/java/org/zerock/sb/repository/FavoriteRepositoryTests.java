@@ -20,11 +20,10 @@ public class FavoriteRepositoryTests {
     @Test
     public void insertDummies() {
 
-        IntStream.rangeClosed(1, 100).forEach(i -> {
+        IntStream.rangeClosed(1,100).forEach(i -> {
 
-            Long dno = (long)(100 + ( i % 4));
-            String mid = "user" + i;
-            //ManyToOne이 걸려있기 때문에 member, diary 생성
+            Long dno = (long)(100 + (i % 4));
+            String mid = "user"+i;
 
             Diary diary = Diary.builder().dno(dno).build();
             Member member = Member.builder().mid(mid).build();
@@ -35,12 +34,16 @@ public class FavoriteRepositoryTests {
                     .score(1)
                     .build();
 
-
             repository.save(favorite);
-
 
         });
 
     }
 
 }
+
+
+
+
+
+

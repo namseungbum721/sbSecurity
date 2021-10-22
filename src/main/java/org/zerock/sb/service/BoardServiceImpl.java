@@ -1,18 +1,18 @@
 package org.zerock.sb.service;
 
+import groovy.util.logging.Log4j2;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.zerock.sb.entity.Board;
 import org.zerock.sb.dto.BoardDTO;
 import org.zerock.sb.dto.BoardListDTO;
 import org.zerock.sb.dto.PageRequestDTO;
 import org.zerock.sb.dto.PageResponseDTO;
+import org.zerock.sb.entity.Board;
 import org.zerock.sb.repository.BoardRepository;
 
 import java.time.LocalDateTime;
@@ -31,9 +31,9 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public Long register(BoardDTO boardDTO) {
 
-        //DTO를 Entity로 변경
+        //DTO -> entity
         Board board = modelMapper.map(boardDTO, Board.class);
-        //repository save( ) >> Long
+        //repository save( ) -> Long
         boardRepository.save(board);
 
         return board.getBno();
@@ -50,21 +50,18 @@ public class BoardServiceImpl implements BoardService{
                 pageRequestDTO.getSize(),
                 Sort.by("bno").descending());
 
-        Page<Board> result = boardRepository.search1(typeArr, keyword, pageable);
+        Page<Board> result = boardRepository.search1(typeArr,keyword,pageable);
 
         List<BoardDTO> dtoList = result.get().map(
                 board -> modelMapper.map(board, BoardDTO.class))
                 .collect(Collectors.toList());
-
         long totalCount = result.getTotalElements();
 
-
-        return new PageResponseDTO<>(pageRequestDTO, (int)totalCount, dtoList);
+        return new PageResponseDTO<>(pageRequestDTO,(int)totalCount,dtoList);
     }
 
     @Override
     public PageResponseDTO<BoardListDTO> getListWithReplyCount(PageRequestDTO pageRequestDTO) {
-
         char[] typeArr = pageRequestDTO.getTypes();
         String keyword = pageRequestDTO.getKeyword();
 
@@ -73,21 +70,20 @@ public class BoardServiceImpl implements BoardService{
                 pageRequestDTO.getSize(),
                 Sort.by("bno").descending());
 
-        Page<Object[]> result = boardRepository.searchWithReplyCount(typeArr, keyword, pageable);
+        Page<Object[]> result = boardRepository.searchWithReplyCount(typeArr,keyword,pageable);
 
-        List<BoardListDTO> dtoList =  result.get().map(Object -> {
-            BoardListDTO listDTO = BoardListDTO.builder()
-                    .bno((Long)Object[0])
-                    .title((String)Object[1])
-                    .writer((String)Object[2])
-                    .regDate((LocalDateTime)Object[3])
-                    .replyCount((long)Object[4])
-                    .build();
-
-            return listDTO;
+        List<BoardListDTO> dtoList = result.get().map( objects -> {
+           BoardListDTO listDTO = BoardListDTO.builder()
+                   .bno((Long)objects[0])
+                   .title((String)objects[1])
+                   .writer((String)objects[2])
+                   .regDate((LocalDateTime)objects[3])
+                   .replyCount((Long)objects[4])
+                   .build();
+           return listDTO;
         }).collect(Collectors.toList());
 
-        return new PageResponseDTO<>(pageRequestDTO, (int)result.getTotalElements(), dtoList);
+        return new PageResponseDTO<>(pageRequestDTO, (int)result.getTotalElements(), dtoList );
     }
 
     @Override
@@ -100,6 +96,7 @@ public class BoardServiceImpl implements BoardService{
         }
 
         return modelMapper.map(result.get(), BoardDTO.class);
+
     }
 
     @Override
@@ -113,12 +110,28 @@ public class BoardServiceImpl implements BoardService{
         Board board = result.get();
         board.change(boardDTO.getTitle(), boardDTO.getContent());
         boardRepository.save(board);
+
     }
 
     @Override
     public void remove(Long bno) {
 
         boardRepository.deleteById(bno);
-
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

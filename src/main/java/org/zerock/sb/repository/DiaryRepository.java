@@ -9,10 +9,11 @@ import org.zerock.sb.repository.search.DiarySearch;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long>, DiarySearch {
 
-    @Query("select d from Diary d left join d.tags dt where dt like concat('%', :tag, '%')")
+
+    @Query(value = "select d from Diary d left join d.tags dt where dt like concat('%',:tag,'%') " )
     Page<Diary> searchTags(String tag, Pageable pageable);
 
-    @Query("select d, coalesce(sum(f.score), 0)  from Diary d left join Favorite f on f.diary = d group by d")//left join 사용 , object 배열 사용하면 무조건 두개이상일때!!
-    Page<Object[]> findWithFavoriteCount(Pageable pageable);
+    @Query("select d, coalesce( sum(f.score), 0) from Diary d left join Favorite f on f.diary = d group by d ")
+    Page<Object[]> findWithFavoriteCount( Pageable pageable);
 
 }

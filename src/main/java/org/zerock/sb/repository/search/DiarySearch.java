@@ -5,7 +5,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface DiarySearch {
 
-    Page<Object[]> getListSearchList(Pageable pageable);
-
-
+    Page<Object[]> getSearchList(Pageable pageable);
 }

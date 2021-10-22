@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.zerock.sb.entity.Board;
 import org.zerock.sb.repository.search.BoardSearch;
 
-public interface BoardRepository extends JpaRepository<Board, Long>, BoardSearch {
+import java.util.List;
 
-    @Query("select b.bno, b.title, b.writer, b.regDate, count(r) from Board b left join Reply r on r.board = b group by b")
+public interface BoardRepository extends JpaRepository<Board,Long>, BoardSearch {
+
+    @Query("select b.bno, b.title, b.writer, b.regDate , count(r) from Board b left join Reply r on r.board = b group by b ")
     Page<Object[]> ex1(Pageable pageable);
-
 }
